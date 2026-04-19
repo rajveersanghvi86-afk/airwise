@@ -1,38 +1,26 @@
-let chartMain, chart1, chart2, chart3;
+let chartMain, chartHistory;
 
 function showSection(id, event) {
-
-  document.querySelectorAll('.section').forEach(s => {
-    s.style.display = "none";
-  });
-
+  document.querySelectorAll('.section').forEach(s => s.style.display = "none");
   document.getElementById(id).style.display = "block";
 
-  document.querySelectorAll('.sidebar li').forEach(li => {
-    li.classList.remove('active');
-  });
-
+  document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
   event.target.classList.add('active');
 }
 
 async function getAQI() {
-  fetchFast();
-  navigator.geolocation.getCurrentPosition(fetchReal, fetchFast);
-}
-
-async function fetchFast() {
-  let res = await fetch(`https://api.waqi.info/feed/here/?token=a4c8aba8bac6487825c5ae93e599e83613e67940`);
-  let data = await res.json();
-  updateUI(data.data);
+  navigator.geolocation.getCurrentPosition(fetchReal, () => {
+    alert("Enable location access");
+  });
 }
 
 async function fetchReal(pos) {
   let { latitude, longitude } = pos.coords;
 
   let res = await fetch(`https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=a4c8aba8bac6487825c5ae93e599e83613e67940`);
-  let data = await res.json();
+  let result = await res.json();
 
-  updateUI(data.data);
+  updateUI(result.data);
 }
 
 function updateUI(data) {
@@ -54,28 +42,17 @@ function updateUI(data) {
 
   updateTips(aqi);
   updateMap(data);
-  createMainChart(data);
-  createHistoryCharts(data);
+  createCharts(data);
 }
 
 function updateTips(aqi) {
-
-  let tips = aqi < 80 ? [
-    "Go outside freely",
-    "Great day for sports",
-    "Open windows",
-    "Cycle or walk",
-    "Enjoy fresh air"
-  ] : aqi < 150 ? [
-    "Limit outdoor exposure",
-    "Avoid traffic areas",
+  let tips = [
+    "Avoid heavy traffic roads",
+    "Wear mask in polluted areas",
     "Stay hydrated",
-    "Light exercise only"
-  ] : [
-    "Stay indoors",
-    "Wear N95 mask",
-    "Use air purifier",
-    "Avoid exertion"
+    "Limit outdoor exercise",
+    "Check AQI daily",
+    "Use public transport"
   ];
 
   document.getElementById("tipsList").innerHTML =
@@ -83,11 +60,7 @@ function updateTips(aqi) {
 }
 
 function updateMap(data) {
-
   let aqi = data.aqi;
-
-  document.getElementById("mapLocation").innerText =
-    "📍 " + data.city.name;
 
   document.getElementById("routeAdvice").innerText =
     aqi < 80 ? "All routes safe" :
@@ -95,56 +68,28 @@ function updateMap(data) {
     "Stay indoors";
 }
 
-function createMainChart(data) {
+function createCharts(data) {
 
   let pm25 = data.forecast?.daily?.pm25 || [];
-
   let labels = pm25.map(d => d.day.slice(5));
   let values = pm25.map(d => d.avg);
 
   if (chartMain) chartMain.destroy();
+  if (chartHistory) chartHistory.destroy();
 
   chartMain = new Chart(document.getElementById("chart"), {
     type: "line",
-    data: {
-      labels,
-      datasets: [{ label: "AQI Trend", data: values }]
-    }
-  });
-}
-
-function createHistoryCharts(data) {
-
-  let pm25 = data.forecast?.daily?.pm25 || [];
-
-  let labels = pm25.map(d => d.day.slice(5));
-  let values = pm25.map(d => d.avg);
-
-  if (chart1) chart1.destroy();
-  if (chart2) chart2.destroy();
-  if (chart3) chart3.destroy();
-
-  chart1 = new Chart(document.getElementById("chart1"), {
-    type: "line",
-    data: {
-      labels,
-      datasets: [{ label: "AQI", data: values }]
-    }
-  });
-
-  chart2 = new Chart(document.getElementById("chart2"), {
-    type: "bar",
     data: {
       labels,
       datasets: [{ label: "PM2.5", data: values }]
     }
   });
 
-  chart3 = new Chart(document.getElementById("chart3"), {
-    type: "line",
+  chartHistory = new Chart(document.getElementById("chartHistory"), {
+    type: "bar",
     data: {
       labels,
-      datasets: [{ label: "Predicted AQI", data: values.map((v,i)=>v+i*5) }]
+      datasets: [{ label: "PM2.5 Levels", data: values }]
     }
   });
 }
