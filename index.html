@@ -8,7 +8,6 @@
 
 <div class="app">
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <h2>🌱 AirWise</h2>
     <ul>
@@ -19,7 +18,6 @@
     </ul>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
 
     <!-- HOME -->
@@ -38,20 +36,30 @@
       <div class="aqi-card">
         <h2>AQI</h2>
         <h1 id="aqiValue">--</h1>
-        <p id="aqiStatus">Click to check</p>
+        <p id="aqiStatus"></p>
       </div>
 
       <div class="stats"></div>
 
       <div class="recommendations">
-        <h3>Today's Recommendations</h3>
+        <h3>Recommendations</h3>
         <p id="advice"></p>
         <p id="planner"></p>
         <p id="activity"></p>
       </div>
 
+      <!-- NEW IMPACT SECTION -->
+      <div class="impact">
+        <h3>🌍 Why This Matters</h3>
+        <p>
+          Air pollution affects millions globally. AirWise helps users make
+          smarter daily decisions by translating complex AQI data into
+          simple actionable advice.
+        </p>
+      </div>
+
       <div class="graph">
-        <h3>Live AQI Trend</h3>
+        <h3>7-Day PM2.5 Pollution Forecast</h3>
         <canvas id="chart"></canvas>
       </div>
 
@@ -59,23 +67,22 @@
 
     <!-- MAP -->
     <div id="map" class="section" style="display:none;">
-      <h2>📍 Smart Route Advisor</h2>
-      <p id="mapLocation"></p>
+      <h2>📍 Smart Route View</h2>
+
+      <iframe
+        width="100%"
+        height="300"
+        style="border-radius:10px"
+        src="https://www.google.com/maps?q=air+pollution&output=embed">
+      </iframe>
+
       <p id="routeAdvice"></p>
     </div>
 
     <!-- HISTORY -->
     <div id="history" class="section" style="display:none;">
-      <h2>📊 AQI Insights</h2>
-
-      <h4>AQI Over Time</h4>
-      <canvas id="chart1"></canvas>
-
-      <h4>PM2.5 Levels</h4>
-      <canvas id="chart2"></canvas>
-
-      <h4>Predicted AQI</h4>
-      <canvas id="chart3"></canvas>
+      <h2>📊 Pollution Trends</h2>
+      <canvas id="chartHistory"></canvas>
     </div>
 
     <!-- TIPS -->
