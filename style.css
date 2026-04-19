@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI';
+  background: #f4f7f6;
+}
+
+.app {
+  display: flex;
+}
+
+.sidebar {
+  width: 220px;
+  background: #eaf5ec;
+  padding: 20px;
+  height: 100vh;
+}
+
+.sidebar li {
+  list-style: none;
+  padding: 12px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.sidebar li:hover {
+  background: #d4f0db;
+}
+
+.active {
+  background: #cde8d5;
+}
+
+.main {
+  flex: 1;
+  padding: 20px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  padding: 10px 20px;
+  background: #0a5c42;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.aqi-card {
+  background: #dff5e1;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+.stats {
+  display: flex;
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  flex: 1;
+  text-align: center;
+}
+
+.graph, .recommendations {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}

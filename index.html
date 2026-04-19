@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AirWise Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>🌱 AirWise</h2>
+    <ul>
+      <li class="active" onclick="showSection('home', event)">🏠 Home</li>
+      <li onclick="showSection('map', event)">📍 Map</li>
+      <li onclick="showSection('history', event)">📊 History</li>
+      <li onclick="showSection('tips', event)">🔥 Tips</li>
+    </ul>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- HOME -->
+    <div id="home" class="section">
+
+      <div class="topbar">
+        <div id="location">📍 Detecting...</div>
+        <div id="time"></div>
+      </div>
+
+      <div class="header">
+        <h1>Breathe Smart. <span>Plan Better.</span></h1>
+        <button onclick="getAQI()">Check Air Quality →</button>
+      </div>
+
+      <div class="aqi-card">
+        <h2>AQI</h2>
+        <h1 id="aqiValue">--</h1>
+        <p id="aqiStatus">Click to check</p>
+      </div>
+
+      <div class="stats"></div>
+
+      <div class="recommendations">
+        <h3>Today's Recommendations</h3>
+        <p id="advice"></p>
+        <p id="planner"></p>
+        <p id="activity"></p>
+      </div>
+
+      <div class="graph">
+        <h3>Live AQI Trend</h3>
+        <canvas id="chart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- MAP -->
+    <div id="map" class="section" style="display:none;">
+      <h2>📍 Smart Route Advisor</h2>
+      <p id="mapLocation"></p>
+      <p id="routeAdvice"></p>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="history" class="section" style="display:none;">
+      <h2>📊 AQI Insights</h2>
+
+      <h4>AQI Over Time</h4>
+      <canvas id="chart1"></canvas>
+
+      <h4>PM2.5 Levels</h4>
+      <canvas id="chart2"></canvas>
+
+      <h4>Predicted AQI</h4>
+      <canvas id="chart3"></canvas>
+    </div>
+
+    <!-- TIPS -->
+    <div id="tips" class="section" style="display:none;">
+      <h2>🔥 Smart Tips</h2>
+      <ul id="tipsList"></ul>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
