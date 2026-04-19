@@ -4,9 +4,7 @@ body {
   background: #f4f7f6;
 }
 
-.app {
-  display: flex;
-}
+.app { display: flex; }
 
 .sidebar {
   width: 220px;
@@ -23,18 +21,10 @@ body {
   border-radius: 8px;
 }
 
-.sidebar li:hover {
-  background: #d4f0db;
-}
+.sidebar li:hover { background: #d4f0db; }
+.active { background: #cde8d5; }
 
-.active {
-  background: #cde8d5;
-}
-
-.main {
-  flex: 1;
-  padding: 20px;
-}
+.main { flex: 1; padding: 20px; }
 
 .header {
   display: flex;
