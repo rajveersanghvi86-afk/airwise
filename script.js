@@ -15,6 +15,7 @@ async function getAQI() {
 }
 
 async function fetchReal(pos) {
+
   let { latitude, longitude } = pos.coords;
 
   let res = await fetch(`https://api.waqi.info/feed/geo:${latitude};${longitude}/?token=a4c8aba8bac6487825c5ae93e599e83613e67940`);
@@ -40,39 +41,78 @@ function updateUI(data) {
     <div class="card">🌬️ ${data.iaqi.w?.v || "--"} km/h</div>
   `;
 
-  updateTips(aqi);
-  updateMap(data);
+  giveRecommendations(aqi);
+  updateMapAdvice(aqi, data.city.name);
+  updateTips();
   createCharts(data);
 }
 
-function updateTips(aqi) {
+function giveRecommendations(aqi) {
+
+  let advice = "";
+  let plan = "";
+  let activity = "";
+
+  if (aqi < 80) {
+    advice = "Air is clean. Safe to go outside.";
+    plan = "Best time: Morning & Evening";
+    activity = "Running, sports allowed";
+  } 
+  else if (aqi < 150) {
+    advice = "Moderate air. Limit exposure.";
+    plan = "Go out early morning only";
+    activity = "Light walking only";
+  } 
+  else {
+    advice = "Poor air. Stay indoors.";
+    plan = "Avoid outdoor plans";
+    activity = "No outdoor activity";
+  }
+
+  document.getElementById("advice").innerText = advice;
+  document.getElementById("planner").innerText = plan;
+  document.getElementById("activity").innerText = activity;
+}
+
+function updateMapAdvice(aqi, city) {
+
+  let msg = `This map shows your current area (${city}). `;
+
+  if (aqi < 80) {
+    msg += "Air is clean. Most routes are safe.";
+  } 
+  else if (aqi < 150) {
+    msg += "Avoid highways and traffic-heavy roads.";
+  } 
+  else {
+    msg += "High pollution detected. Stay indoors if possible.";
+  }
+
+  document.getElementById("routeAdvice").innerText = msg;
+}
+
+function updateTips() {
   let tips = [
-    "Avoid heavy traffic roads",
-    "Wear mask in polluted areas",
+    "Avoid traffic-heavy roads",
+    "Wear mask if needed",
     "Stay hydrated",
     "Limit outdoor exercise",
-    "Check AQI daily",
-    "Use public transport"
+    "Check AQI daily"
   ];
 
   document.getElementById("tipsList").innerHTML =
     tips.map(t => `<li>${t}</li>`).join("");
 }
 
-function updateMap(data) {
-  let aqi = data.aqi;
-
-  document.getElementById("routeAdvice").innerText =
-    aqi < 80 ? "All routes safe" :
-    aqi < 150 ? "Avoid highways" :
-    "Stay indoors";
-}
-
 function createCharts(data) {
 
   let pm25 = data.forecast?.daily?.pm25 || [];
+
   let labels = pm25.map(d => d.day.slice(5));
   let values = pm25.map(d => d.avg);
+
+  // simulate past trend (for history)
+  let pastValues = values.map(v => Math.max(20, v - Math.random()*50));
 
   if (chartMain) chartMain.destroy();
   if (chartHistory) chartHistory.destroy();
@@ -81,7 +121,10 @@ function createCharts(data) {
     type: "line",
     data: {
       labels,
-      datasets: [{ label: "PM2.5", data: values }]
+      datasets: [{
+        label: "Forecast PM2.5",
+        data: values
+      }]
     }
   });
 
@@ -89,7 +132,10 @@ function createCharts(data) {
     type: "bar",
     data: {
       labels,
-      datasets: [{ label: "PM2.5 Levels", data: values }]
+      datasets: [{
+        label: "Past PM2.5 Trend",
+        data: pastValues
+      }]
     }
   });
 }
